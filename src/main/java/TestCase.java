@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ public class TestCase {
         );
         List<Path> files = Files.walk(Paths.get(src))
                 .filter(p -> p.toString().endsWith(".java") && !Files.isDirectory(p))
+                .sorted(Comparator.reverseOrder())
                 .collect(Collectors.toList());
         parser.createASTs(
                 files.stream().map(Path::toString).toArray(String[]::new),
