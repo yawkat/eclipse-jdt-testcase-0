@@ -14,15 +14,15 @@ import org.eclipse.jdt.core.dom.FileASTRequestor;
 
 public class TestCase {
     public static void main(String[] args) throws IOException {
-        ASTParser parser = ASTParser.newParser(AST.JLS9);
+        ASTParser parser = ASTParser.newParser(AST.JLS_Latest);
         Map<String, String> options = new HashMap<>();
-        options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_10);
+        options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_15);
         options.put(JavaCore.CORE_ENCODING, "UTF-8");
-        options.put(JavaCore.COMPILER_DOC_COMMENT_SUPPORT, JavaCore.ENABLED);
+        options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_15);
         parser.setCompilerOptions(options);
         parser.setResolveBindings(true);
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
-        String src = "/var/tmp/merged";
+        String src = "input";
         parser.setEnvironment(
                 new String[0],
                 new String[]{ src },
@@ -31,7 +31,7 @@ public class TestCase {
         );
         List<Path> files = Files.walk(Paths.get(src))
                 .filter(p -> p.toString().endsWith(".java") && !Files.isDirectory(p))
-                .sorted(Comparator.reverseOrder())
+                .sorted()
                 .collect(Collectors.toList());
         parser.createASTs(
                 files.stream().map(Path::toString).toArray(String[]::new),
